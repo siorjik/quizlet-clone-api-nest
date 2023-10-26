@@ -16,6 +16,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": { "@entities/*": ["./src/entities/*"], "@dto/*": ["./src/dto/*"], "@pipes/*": ["./src/pipes/*"] }
   }
 }

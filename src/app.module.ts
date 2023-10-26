@@ -1,13 +1,21 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
+import { config } from 'dotenv'
 
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
 import UserModule from './entities/user/user.module'
+import SetModule from '@entities/set/set.module'
+import LoggerMiddleware from './loger/logger.middleware'
+
+config({ path: `.env.${process.env.NODE_ENV}` })
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/quizlet'), UserModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [MongooseModule.forRoot(process.env.DB_URL), UserModule, SetModule],
+  controllers: [],
+  providers: [],
 })
-export class AppModule {}
+
+export default class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*')
+  }
+}
