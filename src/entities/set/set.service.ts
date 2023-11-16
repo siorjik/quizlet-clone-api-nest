@@ -45,9 +45,9 @@ export default class SetService {
     }
   }
 
-  async update(id: string, updateDto: UpdateSetDto): Promise<Set> {
+  async update(updateDto: UpdateSetDto): Promise<Set> {
     try {
-      return await this.setModel.findOneAndUpdate({ _id: id }, { ...updateDto }, { new: true })
+      return await this.setModel.findOneAndUpdate({ _id: updateDto._id }, { ...updateDto }, { new: true })
     } catch (error) {
       throw new BadRequestException(error.message)
     }

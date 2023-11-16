@@ -7,7 +7,7 @@ import { User } from './schemas/user.schema'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import ReturnUserDto from './dto/returnUserDto'
 
-@Controller('user')
+@Controller('users')
 export default class UserController {
   constructor(private readonly userService: UserService) {}
 

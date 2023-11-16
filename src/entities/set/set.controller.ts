@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiBadRequestResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { Types } from 'mongoose'
 
 import SetService from './set.service'
 import ReturnSetDto from './dto/returnSet.dto'
@@ -11,7 +10,7 @@ import BadRequestDto from '@dto/badRequest.dto'
 import UpdateSetDto from './dto/updateSet.dto'
 import ObjectIdPipe from '@pipes/objectId.pipe'
 
-@Controller('set')
+@Controller('sets')
 export default class SetController {
   constructor(private readonly setService: SetService) {}
 
@@ -52,8 +51,8 @@ export default class SetController {
   @ApiTags('Set')
   @ApiResponse({ status: 200, type: ReturnSetDto })
   @ApiBadRequestResponse({ status: 400, type: BadRequestDto })
-  @Patch(':id')
-  async update(@Param('id', ObjectIdPipe) id: string, @Body() updateDto: UpdateSetDto): Promise<Set> {
-    return await this.setService.update(id, updateDto)
+  @Patch()
+  async update(@Body() updateDto: UpdateSetDto): Promise<Set> {
+    return await this.setService.update(updateDto)
   }
 }
