@@ -1,0 +1,40 @@
+version: '3'
+
+volumes:
+  db-data:
+
+networks:
+  quizlet-clone:
+    name: quizlet-clone
+    driver: bridge
+
+services:
+  api:
+    build: ./
+    image: api
+    container_name: api
+    env_file:
+      - .env.production
+    ports:
+      - '8080:8080'
+    # restart: always
+    depends_on:
+      - mongo
+    networks:
+      - quizlet-clone
+    # volumes:
+    #   - ./:/app
+    #   - /app/node_modules
+
+  mongo:
+      image: mongo
+      container_name: mongo
+      ports:
+        - '27017:27017'
+      # restart: always
+      env_file:
+        - .env.production
+      volumes:
+        - db-data:/data/db
+      networks:
+        - quizlet-clone
