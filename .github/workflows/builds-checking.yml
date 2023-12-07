@@ -11,21 +11,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Create .env
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_ENV_NODE: "production"
-          envkey_CLIENT_HOST: "http://localhost:3000"
-          envkey_DB_URL: "mongodb://root:password@mongo:27017/quizlet?authSource=admin"
-          envkey_MONGO_INITDB_ROOT_USERNAME: "root"
-          envkey_MONGO_INITDB_ROOT_PASSWORD: "password"
-          envkey_MONGO_INITDB_DATABASE: "quizlet"
-          file_name: .env.production
       - name: Get code
         uses: actions/checkout@v3
+        
       - name: Yarn install
         run: yarn install
+        
+        # env:
+        #   NODE_ENV: ${{ prod.NODE_ENV }}
+        #   CLIENT_HOST: ${{ prod.CLIENT_HOST }}
+        #   DB_URL: ${{ prod.DB_URL }}
+        #   MONGO_INITDB_ROOT_USERNAME: ${{ prod.MONGO_INITDB_ROOT_USERNAME }}
+        #   MONGO_INITDB_ROOT_PASSWORD: ${{ prod.MONGO_INITDB_ROOT_PASSWORD }}
+        #   MONGO_INITDB_ROOT_DATABASE: ${{ prod.MONGO_INITDB_ROOT_DATABASE }}
+
+      - name: Make .env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NODE_ENV: ${{ prod.NODE_ENV }}
+          envkey_CLIENT_HOST: ${{ prod.CLIENT_HOST }}
+          envkey_DB_URL: ${{ prod.DB_URL }}
+          envkey_MONGO_INITDB_ROOT_USERNAME: ${{ prod.MONGO_INITDB_ROOT_USERNAME }}
+          envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ prod.MONGO_INITDB_ROOT_PASSWORD }}
+          envkey_MONGO_INITDB_ROOT_DATABASE: ${{ prod.MONGO_INITDB_ROOT_DATABASE }}
+          file_name: .env.production
+        
       - name: Check build
         run: yarn build
+        
       - name: Build the docker-compose images
         run: docker-compose build
