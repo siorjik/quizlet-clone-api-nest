@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-envfile:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Make envfile
+      - name: Create .env
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_ENV_NODE: "production"
@@ -20,10 +20,7 @@ jobs:
           envkey_MONGO_INITDB_ROOT_USERNAME: "root"
           envkey_MONGO_INITDB_ROOT_PASSWORD: "password"
           envkey_MONGO_INITDB_DATABASE: "quizlet"
-
-  build:
-    runs-on: ubuntu-latest
-    steps:
+          file_name: .env.production
       - name: Get code
         uses: actions/checkout@v3
       - name: Yarn install
