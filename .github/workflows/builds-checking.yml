@@ -28,12 +28,12 @@ jobs:
       - name: Make .env
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_NODE_ENV: ${{ prod.NODE_ENV }}
-          envkey_CLIENT_HOST: ${{ prod.CLIENT_HOST }}
-          envkey_DB_URL: ${{ prod.DB_URL }}
-          envkey_MONGO_INITDB_ROOT_USERNAME: ${{ prod.MONGO_INITDB_ROOT_USERNAME }}
-          envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ prod.MONGO_INITDB_ROOT_PASSWORD }}
-          envkey_MONGO_INITDB_ROOT_DATABASE: ${{ prod.MONGO_INITDB_ROOT_DATABASE }}
+          envkey_NODE_ENV: ${{ vars.NODE_ENV }}
+          envkey_CLIENT_HOST: ${{ vars.CLIENT_HOST }}
+          envkey_DB_URL: ${{ vars.DB_URL }}
+          envkey_MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_INITDB_ROOT_USERNAME }}
+          envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ vars.MONGO_INITDB_ROOT_PASSWORD }}
+          envkey_MONGO_INITDB_ROOT_DATABASE: ${{ vars.MONGO_INITDB_ROOT_DATABASE }}
           file_name: .env.production
         
       - name: Check build
