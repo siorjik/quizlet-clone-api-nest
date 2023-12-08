@@ -1,0 +1,36 @@
+name: Build checking
+
+on:
+  push:
+    branches: development
+  pull_request:
+    branches: development
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+
+      - name: Make .env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NODE_ENV: ${{ vars.NODE_ENV }}
+          envkey_CLIENT_HOST: ${{ vars.CLIENT_HOST }}
+          envkey_DB_URL: ${{ vars.DB_URL }}
+          envkey_MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_INITDB_ROOT_USERNAME }}
+          envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ vars.MONGO_INITDB_ROOT_PASSWORD }}
+          envkey_MONGO_INITDB_ROOT_DATABASE: ${{ vars.MONGO_INITDB_ROOT_DATABASE }}
+          file_name: .env.production
+
+      - name: Yarn install
+        run: yarn install
+        
+      - name: Check build
+        run: yarn build
+        
+      - name: Build the docker-compose images
+        run: docker-compose build
