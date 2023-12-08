@@ -35,4 +35,4 @@ jobs:
       - name: Build the docker-compose images
         run: |
           echo "ENV_NAME=production" >> $GITHUB_ENV
-          docker-compose build
+          docker-compose build --build-arg ENV_NAME=production
