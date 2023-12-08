@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package.json /app
 COPY yarn.lock /app/
 
+ARG ENV_NAME
+
 RUN yarn install
 
 COPY . .
@@ -13,5 +15,6 @@ EXPOSE 8080
 
 RUN yarn build
 
-CMD [ "yarn", "start:prod" ]
-#CMD [ "yarn", "start:dev" ]
+# ENTRYPOINT [ "yarn", "start:production" ]
+# ENTRYPOINT yarn start:ENV_NAME
+# CMD [ "yarn", "start" ]

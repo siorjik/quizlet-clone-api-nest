@@ -10,11 +10,15 @@ networks:
 
 services:
   api:
-    build: ./
+    build:
+      context: .
+      args:
+        ENV_NAME: ${ENV_NAME:-development}
     image: api
+    entrypoint: ['yarn', 'start:${ENV_NAME:-development}']
     container_name: api
     env_file:
-      - .env.production
+      - .env.${ENV_NAME:-development}
     ports:
       - '8080:8080'
     # restart: always
@@ -27,14 +31,14 @@ services:
     #   - /app/node_modules
 
   mongo:
-      image: mongo
-      container_name: mongo
-      ports:
-        - '27017:27017'
-      # restart: always
-      env_file:
-        - .env.production
-      volumes:
-        - db-data:/data/db
-      networks:
-        - quizlet-clone
+    image: mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    # restart: always
+    env_file:
+      - .env.${ENV_NAME:-development}
+    volumes:
+      - db-data:/data/db
+    networks:
+      - quizlet-clone
