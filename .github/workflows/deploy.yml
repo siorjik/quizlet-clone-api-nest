@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Deploy to hosting
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-checking:
     runs-on: ubuntu-latest
     environment: prod
     steps:
@@ -17,14 +17,6 @@ jobs:
         
       - name: Yarn install
         run: yarn install
-        
-        # env:
-        #   NODE_ENV: ${{ prod.NODE_ENV }}
-        #   CLIENT_HOST: ${{ prod.CLIENT_HOST }}
-        #   DB_URL: ${{ prod.DB_URL }}
-        #   MONGO_INITDB_ROOT_USERNAME: ${{ prod.MONGO_INITDB_ROOT_USERNAME }}
-        #   MONGO_INITDB_ROOT_PASSWORD: ${{ prod.MONGO_INITDB_ROOT_PASSWORD }}
-        #   MONGO_INITDB_ROOT_DATABASE: ${{ prod.MONGO_INITDB_ROOT_DATABASE }}
       
       - name: Make .env
         uses: SpicyPizza/create-envfile@v2.0
@@ -43,8 +35,8 @@ jobs:
       - name: Build the docker-compose images
         run: docker-compose build
 
-  deploy:
-    needs: build
+  docker-hub-deploy:
+    needs: build-checking
     runs-on: ubuntu-latest
     environment: prod
     steps:
@@ -78,3 +70,13 @@ jobs:
           push: true
           tags: siorjik/nest-image:latest
           version: latest
+          
+  # hosting-deploy:
+  #   needs: docker-hub-deploy
+  #   runs-on: ubuntu-latest
+  #   environment: prod
+  #   steps:
+  #     - name: Deploy to hosting via SSH
+  #       uses: appleboy/ssh-action@v1.0.0
+  #       with:
+          
