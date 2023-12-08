@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: prod
     steps:
       - name: Get code
         uses: actions/checkout@v3
