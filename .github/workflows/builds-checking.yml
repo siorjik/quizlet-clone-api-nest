@@ -24,7 +24,9 @@ jobs:
         #   MONGO_INITDB_ROOT_USERNAME: ${{ prod.MONGO_INITDB_ROOT_USERNAME }}
         #   MONGO_INITDB_ROOT_PASSWORD: ${{ prod.MONGO_INITDB_ROOT_PASSWORD }}
         #   MONGO_INITDB_ROOT_DATABASE: ${{ prod.MONGO_INITDB_ROOT_DATABASE }}
-
+      - name: Check vars
+        run: echo secret - ${{ vars.prod.NODE_ENV }} /  ${{ vars.NODE_ENV }}
+      
       - name: Make .env
         uses: SpicyPizza/create-envfile@v2.0
         with:
