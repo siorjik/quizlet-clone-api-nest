@@ -1,0 +1,21 @@
+name: Build checking
+
+on:
+  push:
+    branches: development
+  pull_request:
+    branches: development
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+        
+      - name: Check build
+        run: yarn build
+        
+      - name: Build the docker-compose images
+        run: docker-compose build
