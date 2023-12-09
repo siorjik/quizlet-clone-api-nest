@@ -76,4 +76,9 @@ Nest is [MIT licensed](LICENSE).
 
 ## Start with docker compose
 
-docker compose --env-file .env.<name> up
+Primery commands:
+- docker compose build
+- docker compose up
+- docker compose stop
+- docker compose down
+- docker system prune -a
