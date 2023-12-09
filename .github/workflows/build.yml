@@ -33,7 +33,7 @@ jobs:
         run: yarn build
 
       - name: Set .env name for docker
-        run: echo "ENV_FILE=.env.production" >> $GITHUB_ENV
+        run: echo "ENV_FILE=.env.development" >> $GITHUB_ENV
         
       - name: Build the docker-compose images
-        run: docker-compose build --build-arg ENV_NAME=production
+        run: docker-compose build
