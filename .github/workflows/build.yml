@@ -24,7 +24,7 @@ jobs:
           envkey_MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_INITDB_ROOT_USERNAME }}
           envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ vars.MONGO_INITDB_ROOT_PASSWORD }}
           envkey_MONGO_INITDB_ROOT_DATABASE: ${{ vars.MONGO_INITDB_ROOT_DATABASE }}
-          file_name: .env.production
+          file_name: .env.development
 
       - name: Yarn install
         run: yarn install
@@ -33,7 +33,7 @@ jobs:
         run: yarn build
 
       - name: Set .env name for docker
-        run: echo "ENV_FILE=.env.production" >> $GITHUB_ENV
+        run: echo "ENV_FILE=.env.development" >> $GITHUB_ENV
         
       - name: Build the docker-compose images
         run: docker-compose build
