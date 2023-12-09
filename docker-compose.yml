@@ -10,15 +10,11 @@ networks:
 
 services:
   api:
-    build:
-      context: .
-      args:
-        ENV_NAME: ${ENV_NAME:-development}
+    build: .
     image: api
-    entrypoint: ['yarn', 'start:${ENV_NAME:-development}']
     container_name: api
     env_file:
-      - .env.${ENV_NAME:-development}
+      - ${ENV_FILE:-.env.development}
     ports:
       - '8080:8080'
     # restart: always
@@ -37,7 +33,7 @@ services:
       - '27017:27017'
     # restart: always
     env_file:
-      - .env.${ENV_NAME:-development}
+      - ${ENV_FILE:-.env.development}
     volumes:
       - db-data:/data/db
     networks:
