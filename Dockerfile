@@ -3,7 +3,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package.json /app
-COPY yarn.lock /app/
+COPY yarn.lock /app
 
 RUN yarn install
 
@@ -13,5 +13,5 @@ EXPOSE 8080
 
 RUN yarn build
 
-CMD [ "yarn", "start:prod" ]
-#CMD [ "yarn", "start:dev" ]
+CMD [ "yarn", "start" ]
+# CMD [ "yarn", "start:development" ]

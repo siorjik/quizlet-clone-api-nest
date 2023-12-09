@@ -10,11 +10,11 @@ networks:
 
 services:
   api:
-    build: ./
+    build: .
     image: api
     container_name: api
     env_file:
-      - .env.production
+      - ${ENV_FILE:-.env.development}
     ports:
       - '8080:8080'
     # restart: always
@@ -27,14 +27,14 @@ services:
     #   - /app/node_modules
 
   mongo:
-      image: mongo
-      container_name: mongo
-      ports:
-        - '27017:27017'
-      # restart: always
-      env_file:
-        - .env.production
-      volumes:
-        - db-data:/data/db
-      networks:
-        - quizlet-clone
+    image: mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    # restart: always
+    env_file:
+      - ${ENV_FILE:-.env.development}
+    volumes:
+      - db-data:/data/db
+    networks:
+      - quizlet-clone
