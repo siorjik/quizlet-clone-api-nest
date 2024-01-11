@@ -4,11 +4,11 @@ import { ApiBadRequestResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/s
 import SetService from './set.service'
 import ReturnSetDto from './dto/returnSet.dto'
 import CreateSetDto from './dto/createSet.dto'
-import { Set } from './schemas/set.schema'
-import DeleteResultDto from '@dto/deleteResult.dto'
-import BadRequestDto from '@dto/badRequest.dto'
+import Set from './schemas/set.schema'
+import DeleteResultDto from '@/dto/deleteResult.dto'
+import BadRequestDto from '@/dto/badRequest.dto'
 import UpdateSetDto from './dto/updateSet.dto'
-import ObjectIdPipe from '@pipes/objectId.pipe'
+import ObjectIdPipe from '@/pipes/objectId.pipe'
 
 @Controller('sets')
 export default class SetController {

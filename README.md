@@ -76,7 +76,7 @@ Nest is [MIT licensed](LICENSE).
 
 ## Start with docker compose
 
-Primery commands:
+Primary commands:
 - docker compose build
 - docker compose up
 - docker compose stop

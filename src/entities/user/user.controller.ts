@@ -3,7 +3,7 @@ import { Controller } from '@nestjs/common'
 
 import UserService from './user.service'
 import CreateUserDto from './dto/createUserDto'
-import { User } from './schemas/user.schema'
+import User from './schemas/user.schema'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import ReturnUserDto from './dto/returnUserDto'
 

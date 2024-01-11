@@ -2,9 +2,9 @@ import { Model } from 'mongoose'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Set } from './schemas/set.schema'
+import Set from './schemas/set.schema'
 import CreateSetDto from './dto/createSet.dto'
-import DeleteResultDto from '@dto/deleteResult.dto'
+import DeleteResultDto from '@/dto/deleteResult.dto'
 import UpdateSetDto from './dto/updateSet.dto'
 
 @Injectable()
@@ -13,9 +13,7 @@ export default class SetService {
 
   async create(createDto: CreateSetDto): Promise<Set> {
     try {
-      const createdSet = new this.setModel(createDto)
-  
-      return createdSet.save()
+      return await new this.setModel(createDto).save()
     } catch (error) {
       throw new BadRequestException(error.message)
     }
