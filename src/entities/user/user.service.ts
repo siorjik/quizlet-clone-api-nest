@@ -2,7 +2,7 @@ import { Model } from 'mongoose'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { User } from './schemas/user.schema'
+import User from './schemas/user.schema'
 import CreateUserDto from './dto/createUserDto'
 
 @Injectable()
@@ -11,9 +11,7 @@ export default class UserService {
 
   async create(createDto: CreateUserDto): Promise<User> {
     try {
-      const createdUser = new this.userModel(createDto)
-  
-      return createdUser.save()
+      return await new this.userModel(createDto).save()
     } catch (error) {
       throw new BadRequestException(error.message)
     }
@@ -21,7 +19,7 @@ export default class UserService {
 
   async getAll(): Promise<User[]> {
     try {
-      return this.userModel.find().exec()
+      return await this.userModel.find().exec()
     } catch (error) {
       throw new BadRequestException(error.message)
     }
