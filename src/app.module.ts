@@ -8,11 +8,12 @@ import SetModule from './entities/set/set.module'
 import AuthModule from './auth/auth.module'
 
 import LoggerMiddleware from './logger/logger.middleware'
+import TokenModule from './entities/token/token.module'
 
 config({ path: `.env.${process.env.NODE_ENV}` })
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.DB_URL), UserModule, SetModule, AuthModule],
+  imports: [MongooseModule.forRoot(process.env.DB_URL), UserModule, SetModule, AuthModule, TokenModule],
   controllers: [],
   providers: [],
 })
