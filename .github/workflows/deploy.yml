@@ -62,12 +62,16 @@ jobs:
           push: true
           tags: siorjik/nest-image:latest
           
-  # hosting-deploy:
-  #   needs: docker-hub-deploy
-  #   runs-on: ubuntu-latest
-  #   environment: prod
-  #   steps:
-  #     - name: Deploy to hosting via SSH
-  #       uses: appleboy/ssh-action@v1.0.0
-  #       with:
+  hosting-deploy:
+    needs: docker-hub-deploy
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Deploy to hosting via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 51.38.71.128
+          username: ubuntu
+          script: |
+            echo "Nice Job!!!"
           
