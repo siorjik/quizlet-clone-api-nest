@@ -72,6 +72,7 @@ jobs:
         with:
           host: 51.38.71.128
           username: ubuntu
+          password: mHpX98x5vPc6
           script: |
             echo "Nice Job!!!"
           
