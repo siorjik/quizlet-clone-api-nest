@@ -67,6 +67,20 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     steps:
+      - name: Make .env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NODE_ENV: ${{ vars.NODE_ENV }}
+          envkey_CLIENT_HOST: ${{ vars.CLIENT_HOST }}
+          envkey_DB_URL: ${{ vars.DB_URL }}
+          envkey_MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_INITDB_ROOT_USERNAME }}
+          envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ vars.MONGO_INITDB_ROOT_PASSWORD }}
+          envkey_MONGO_INITDB_ROOT_DATABASE: ${{ vars.MONGO_INITDB_ROOT_DATABASE }}
+          file_name: .env.production
+
+      - name: Set .env name for docker
+        run: echo "ENV_FILE=.env.production" >> $GITHUB_ENV
+          
       - name: Deploy to hosting via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
