@@ -72,7 +72,7 @@ jobs:
       - name: Deploy to hosting via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 51.38.71.128
+          host: ${{ secrets.HOSTING }}
           username: ${{ secrets.HOSTING_USER }}
           password: ${{ secrets.HOSTING_PASS }}
           script: |
