@@ -29,14 +29,4 @@ export default class UserController {
   async getAll(): Promise<User[]> {
     return await this.userService.getAll()
   }
-
-  @ApiTags('User')
-  @ApiResponse({ status: 201 })
-  @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
-  @Delete()
-  async remove(): Promise<any> {
-    return 'deleted'
-  }
 }
