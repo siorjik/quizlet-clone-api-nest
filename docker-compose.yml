@@ -18,6 +18,8 @@ services:
       - NODE_ENV=${NODE_ENV}
       - CLIENT_HOST=${CLIENT_HOST}
       - DB_URL=${DB_URL}
+      - ACCESS_SECRET=${ACCESS_SECRET}
+      - REFRESH_SECRET=${REFRESH_SECRET}
     # env_file:
     #   - ${ENV_FILE:-.env.development}
     ports:
