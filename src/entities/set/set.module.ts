@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { Set, SetSchema } from './schemas/set.schema'
+import Set, { SetSchema } from './schemas/set.schema'
 import SetService from './set.service'
 import SetController from './set.controller'
 

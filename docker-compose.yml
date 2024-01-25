@@ -10,11 +10,16 @@ networks:
 
 services:
   api:
-    build: .
-    image: api
+    # build: .
+    # image: api
+    image: siorjik/nest-image:latest
     container_name: api
-    env_file:
-      - ${ENV_FILE:-.env.development}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - CLIENT_HOST=${CLIENT_HOST}
+      - DB_URL=${DB_URL}
+    # env_file:
+    #   - ${ENV_FILE:-.env.development}
     ports:
       - '8080:8080'
     # restart: always
@@ -29,11 +34,15 @@ services:
   mongo:
     image: mongo
     container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     ports:
       - '27017:27017'
     # restart: always
-    env_file:
-      - ${ENV_FILE:-.env.development}
+    # env_file:
+    #   - ${ENV_FILE:-.env.development}
     volumes:
       - db-data:/data/db
     networks:
