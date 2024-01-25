@@ -2,10 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
+import { config } from 'dotenv'
 
 import Token from './schemas/token.schema'
 import ReturnTokenDto from './dto/returnToken.dto'
 import DeleteResultDto from '@/dto/deleteResult.dto'
+
+config({ path: `.env.${process.env.NODE_ENV}` })
 
 @Injectable()
 export default class TokenService {
