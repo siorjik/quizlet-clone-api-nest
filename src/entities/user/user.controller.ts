@@ -1,4 +1,4 @@
-import { Post, Body, Get, UseGuards } from '@nestjs/common'
+import { Post, Body, Get, UseGuards, Delete } from '@nestjs/common'
 import { Controller } from '@nestjs/common'
 
 import UserService from './user.service'
@@ -28,5 +28,15 @@ export default class UserController {
   @Get()
   async getAll(): Promise<User[]> {
     return await this.userService.getAll()
+  }
+
+  @ApiTags('User')
+  @ApiResponse({ status: 201 })
+  @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async remove(): Promise<any> {
+    return 'deleted'
   }
 }
