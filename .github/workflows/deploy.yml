@@ -80,4 +80,5 @@ jobs:
             sudo docker-compose stop
             sudo docker-compose pull
             sudo docker-compose --env-file .env.production up -d
+            sudo docker image prune -f
           
