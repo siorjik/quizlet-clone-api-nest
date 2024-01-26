@@ -62,7 +62,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: siorjik/nest-image:latest
+          tags: ${{ vars.API_IMAGE }}:latest
           
   hosting-deploy:
     needs: docker-hub-deploy
