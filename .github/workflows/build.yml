@@ -21,5 +21,5 @@ jobs:
       - name: Check build
         run: yarn build
         
-      - name: Build the docker-compose images
+      - name: Build the docker image
         run: docker build .
