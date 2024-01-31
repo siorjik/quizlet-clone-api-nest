@@ -8,45 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-checking:
-    runs-on: ubuntu-latest
-    environment: prod
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-        
-      - name: Yarn install
-        run: yarn install
-      
-      - name: Make .env
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_NODE_ENV: ${{ vars.NODE_ENV }}
-          envkey_CLIENT_HOST: ${{ vars.CLIENT_HOST }}
-          envkey_DB_URL: ${{ vars.DB_URL }}
-          envkey_MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_INITDB_ROOT_USERNAME }}
-          envkey_MONGO_INITDB_ROOT_PASSWORD: ${{ vars.MONGO_INITDB_ROOT_PASSWORD }}
-          envkey_MONGO_INITDB_ROOT_DATABASE: ${{ vars.MONGO_INITDB_ROOT_DATABASE }}
-          envkey_ACCESS_SECRET: ${{ vars.ACCESS_SECRET }}
-          envkey_REFRESH_SECRET: ${{ vars.REFRESH_SECRET }}
-          file_name: .env.production
-        
-      - name: Check build
-        run: yarn build
-        
-      - name: Set .env name for docker
-        run: echo "ENV_FILE=.env.production" >> $GITHUB_ENV
-        
-      - name: Build the docker-compose images
-        run: docker-compose build
-
   docker-hub-deploy:
-    needs: build-checking
     runs-on: ubuntu-latest
     environment: prod
     steps:
       - name: Get Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
