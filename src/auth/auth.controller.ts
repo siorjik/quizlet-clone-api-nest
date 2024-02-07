@@ -29,8 +29,8 @@ export default class AuthController {
   @ApiResponse({ status: 200, type: ReturnTokenDto })
   @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
   @HttpCode(HttpStatus.OK)
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth('JWT')
+  // @UseGuards(JwtAuthGuard)
   @ApiQuery({ name: 'refresh', description: 'refresh token' })
   @Get('refresh')
   async refresh(@Query('refresh') refresh: string): Promise<ReturnTokenDto> {
