@@ -1,7 +1,7 @@
 import { Model } from 'mongoose'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 
 import User from './schemas/user.schema'
 import CreateUserDto from './dto/createUser.dto'
