@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import { Model, Schema } from 'mongoose'
 import { config } from 'dotenv'
 
 import Token from './schemas/token.schema'
@@ -21,7 +21,7 @@ export default class TokenService {
     return +new Date() + (value * 60000)
   }
 
-  async generateTokens(user: { [k: string]: string | Types.ObjectId }, isRefresh = false): Promise<ReturnTokenDto> {
+  async generateTokens(user: { [k: string]: string | Schema.Types.ObjectId }, isRefresh = false): Promise<ReturnTokenDto> {
     const accessToken =
       this.jwtService.sign({ user }, { secret: process.env.ACCESS_SECRET, expiresIn: this.accessExpire + 'm' })
     const refreshToken =

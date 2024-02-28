@@ -6,9 +6,14 @@ import AuthController from './auth.controller'
 import AuthService from './auth.service'
 import TokenModule from '@/entities/token/token.module'
 import JwtStrategy from './auth.strategy'
+import Token, { TokenSchema } from '@/entities/token/schemas/token.schema'
+import UserModule from '@/entities/user/user.module'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), TokenModule],
+  imports: [
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, { name: Token.name, schema: TokenSchema }]),
+    TokenModule, UserModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy]
 })
