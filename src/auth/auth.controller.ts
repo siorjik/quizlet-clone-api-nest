@@ -2,8 +2,7 @@ import { Post, Body, Controller, HttpCode, HttpStatus, Query, Get, UseGuards } f
 import { ApiBadRequestResponse, ApiBearerAuth, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
 
 import AuthService from './auth.service'
-import ReturnUserDto from '@/entities/user/dto/returnUserDto'
-import User from '@/entities/user/schemas/user.schema'
+import ReturnUserDto from '@/entities/user/dto/returnUser.dto'
 import LoginDto from './dto/login.dto'
 import BadRequestDto from '@/dto/badRequest.dto'
 import ReturnTokenDto from '@/entities/token/dto/returnToken.dto'
@@ -21,7 +20,7 @@ export default class AuthController {
   @ApiBadRequestResponse({ status: 400, type: BadRequestDto })
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(@Body() data: LoginDto): Promise<Omit<User, 'password'> & ReturnTokenDto> {
+  async login(@Body() data: LoginDto): Promise<ReturnUserDto & ReturnTokenDto> {
     return await this.authService.login(data)
   }
 
@@ -38,7 +37,7 @@ export default class AuthController {
   }
 
   @ApiTags('Auth')
-  @ApiResponse({ status: 200, type: ReturnUserDto })
+  @ApiResponse({ status: 200, type: DeleteResultDto })
   @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth('JWT')
