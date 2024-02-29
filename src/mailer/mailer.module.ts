@@ -12,7 +12,7 @@ config({ path: `.env.${process.env.NODE_ENV}` })
       transport: {
         host: process.env.MAILER_HOST,
         port: +process.env.MAILER_PORT,
-        secure: false,
+        secure: true,
         logger: true,
         debug: true,
         auth: {
