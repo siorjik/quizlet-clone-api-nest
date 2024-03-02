@@ -80,14 +80,14 @@ export default class UserService {
       if (!user) throw new BadRequestException('Sorry, account with this email does not exist...')
       if (user && !user.isActive) throw new BadRequestException('Your user does not activated! You can not change the password!')
       else {
-        const tokens = await this.tokenService.generateTokens({ _id: user._id, email }, false)
+        const tokens = await this.tokenService.generateTokens({ _id: user._id, email })
 
         await this.mailerService.sendMail({
           to: email,
           subject: 'Password recovery.',
           html: `
           <p>Hello ${user.name}, change password for your account.</p>
-          <a href='${process.env.CLIENT_HOST}/recover-password?token=${tokens.accessToken}'>
+          <a href='${process.env.CLIENT_HOST}/create-password?token=${tokens.accessToken}'>
             Link for password recovery
           </a>
           <p>This link will be expired in 30 minutes.</p>
