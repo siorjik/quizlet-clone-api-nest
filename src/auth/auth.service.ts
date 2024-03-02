@@ -30,7 +30,7 @@ export default class AuthService {
   
       const user = await this.userService.getOneByEmail(email)
   
-      if (user) {
+      if (user && user.password) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password: userPass, ...restUser } = user
         const isValidPass = await bcrypt.compare(password, user.password)
