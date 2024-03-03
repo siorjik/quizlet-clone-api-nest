@@ -38,14 +38,17 @@ jobs:
     steps:
       - name: Deploy to hosting via SSH
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          CHECK: 'checking variable'
         with:
           host: ${{ secrets.HOSTING }}
           username: ${{ secrets.HOSTING_USER }}
           password: ${{ secrets.HOSTING_PASS }}
+          envs: CHECK
           script: |
             cd ~/projects/quizlet-clone-api-nest
             sudo docker-compose stop
             sudo docker-compose pull
-            sudo docker-compose --env-file .env.production up -d
+            sudo docker-compose -e CHECK=$CHECK --env-file .env.production up -d
             sudo docker image prune -f
           
