@@ -49,8 +49,8 @@ jobs:
             cd ~/projects/quizlet-clone-api-nest
             sudo docker-compose stop
             sudo docker-compose pull
-            echo env CHECK=$CHECK
-            env CHECK=$CHECK
+            echo env CHECK=rtrtrtt
+            env CHECK=aaaaaa
             sudo docker-compose --env-file .env.production up -d
             sudo docker image prune -f
           
