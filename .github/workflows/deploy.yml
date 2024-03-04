@@ -49,8 +49,8 @@ jobs:
             cd ~/projects/quizlet-clone-api-nest
             sudo docker-compose stop
             sudo docker-compose pull
-            sudo env ACCESS_SECRET=${{ vars.ACCESS_SECRET }} NODE_ENV=${{ vars.NODE_ENV }} DB_URL=${{ vars.DB_URL }} CLIENT_HOST=${{ vars.CLIENT_HOST }} REFRESH_SECRET=${{ vars.REFRESH_SECRET }} \
-              MONGO_INITDB_ROOT_USERNAME=${{ vars.MONGO_INITDB_ROOT_USERNAME }} MONGO_INITDB_ROOT_PASSWORD=${{ vars.MONGO_INITDB_ROOT_PASSWORD }} MONGO_INITDB_DATABASE=${{ vars.MONGO_INITDB_DATABASE }} \
+            sudo env ACCESS_SECRET=${{ secrets.ACCESS_SECRET }} NODE_ENV=${{ vars.NODE_ENV }} DB_URL=${{ secrets.DB_URL }} CLIENT_HOST=${{ vars.CLIENT_HOST }} REFRESH_SECRET=${{ secrets.REFRESH_SECRET }} \
+              MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} MONGO_INITDB_DATABASE=${{ secrets.MONGO_INITDB_DATABASE }} \
               MAILER_USER=${{ vars.MAILER_USER }} MAILER_PORT=${{ vars.MAILER_PORT }} MAILER_HOST=${{ vars.MAILER_HOST }} MAILER_PASS=${{ secrets.MAILER_PASS }} \
               docker-compose up -d
             sudo docker image prune -f
