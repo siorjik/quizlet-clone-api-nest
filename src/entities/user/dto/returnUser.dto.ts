@@ -27,4 +27,8 @@ export default class ReturnUserDto {
   @ApiProperty()
   @IsBoolean()
   isActive: boolean
+
+  @ApiProperty()
+  @IsBoolean()
+  isAuthProvider: boolean
 }

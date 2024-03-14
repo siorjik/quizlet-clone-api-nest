@@ -21,7 +21,9 @@ export default class UserService {
   ){}
 
   async removeInactiveUsers(): Promise<void> {
-    await this.userModel.deleteMany({ password: null, createdAt: { $lte: +new Date() - this.registrationTimeAvailable } })
+    await this.userModel.deleteMany(
+      { password: null, isActive: false, isAuthProvider: false, createdAt: { $lte: +new Date() - this.registrationTimeAvailable }
+    })
   }
 
   async create(createDto: CreateUserDto): Promise<ReturnUserDto> {
@@ -41,14 +43,14 @@ export default class UserService {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...restUser } = user
 
-      const tokens = await this.tokenService.generateTokens({ _id: user._id, email: user.email })
+      const tokens = await this.tokenService.generateTokens({ user: { _id: user._id, email: user.email }, accessTime: 30 })
 
       await this.mailerService.sendMail({
         to: email,
         subject: 'Registration finishing.',
         html: `
           <p>Hello ${name}, you need to create password for your account.</p>
-          <a href='${process.env.CLIENT_HOST}/create-password?accessToken=${tokens.accessToken}'>
+          <a href='${process.env.CLIENT_HOST}/create-password?token=${tokens.accessToken}'>
             Link for password creating
           </a>
           <p>This link will be expired in 30 minutes.</p>
@@ -58,6 +60,16 @@ export default class UserService {
       return restUser
     } catch (error) {
       throw new BadRequestException(error.message)
+    }
+  }
+
+  async createByProvider({ email, name }: { email: string, name: string }): Promise<ReturnUserDto> {
+    try {
+      await this.removeInactiveUsers()
+
+      return (await this.userModel.create({ email, name, isAuthProvider: true, isActive: true })).toObject({ getters: true })
+    } catch (error) {
+      throw new BadRequestException(error)
     }
   }
 
@@ -75,12 +87,12 @@ export default class UserService {
 
   async recoverPassword(email: string): Promise<string> {
     try {
-      const user = await this.getOneByEmail(email)
+      const { user } = await this.getOneByEmail(email)
 
       if (!user) throw new BadRequestException('Sorry, account with this email does not exist...')
       if (user && !user.isActive) throw new BadRequestException('Your user does not activated! You can not change the password!')
       else {
-        const tokens = await this.tokenService.generateTokens({ _id: user._id, email })
+        const tokens = await this.tokenService.generateTokens({ user: { _id: user._id, email }, accessTime: 30 })
 
         await this.mailerService.sendMail({
           to: email,
@@ -103,20 +115,26 @@ export default class UserService {
 
   async update(data: updateUserDto): Promise<ReturnUserDto> {
     try {
-      const user = await this.userModel.findOneAndUpdate({ _id: data._id }, { ...data }, { new: true })
+      const user = await this.userModel.findOneAndUpdate({ _id: data._id }, { ...data }, { new: true, fields: { password: 0 } })
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...restUser } = user
-
-      return restUser
+      return user
     } catch (error) {
       throw new BadRequestException(error.message)
     }
   }
 
-  async getOneByEmail(email: string): Promise<User> {
+  async getOneByEmail(email: string): Promise<{password: string | null, user: ReturnUserDto | null}> {
     try {
-      return await this.userModel.findOne({ email }).lean()
+      const user = await this.userModel.findOne({ email }).lean()
+
+      if (user) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...restUser } = user
+  
+        return { password, user: restUser }
+      }
+
+      return { password: null, user: null }
     } catch (error) {
       throw new BadRequestException(error.message)
     }

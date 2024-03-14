@@ -25,6 +25,15 @@ export default class AuthController {
   }
 
   @ApiTags('Auth')
+  @ApiResponse({ status: 200, type: ReturnUserDto })
+  @ApiBadRequestResponse({ status: 400, type: BadRequestDto })
+  @HttpCode(HttpStatus.OK)
+  @Post('login-provider')
+  async loginByProvider(@Body() data: { email: string, name: string }): Promise<ReturnUserDto & ReturnTokenDto> {
+    return await this.authService.loginByProvider(data)
+  }
+
+  @ApiTags('Auth')
   @ApiResponse({ status: 200, type: ReturnTokenDto })
   @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
   @HttpCode(HttpStatus.OK)
