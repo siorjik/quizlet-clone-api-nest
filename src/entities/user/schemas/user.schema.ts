@@ -20,6 +20,9 @@ export default class User {
   @Prop({ default: false })
   isActive: boolean
 
+  @Prop({ default: false })
+  isAuthProvider: boolean
+
   @Prop()
   createdAt: Date
 

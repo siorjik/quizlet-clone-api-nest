@@ -1,13 +1,15 @@
-import { Post, Body, Get, UseGuards } from '@nestjs/common'
+import { Post, Body, Get, UseGuards, Patch } from '@nestjs/common'
 import { Controller } from '@nestjs/common'
 
 import UserService from './user.service'
 import CreateUserDto from './dto/createUser.dto'
 import User from './schemas/user.schema'
-import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
+import { ApiBadRequestResponse, ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
 import ReturnUserDto from './dto/returnUser.dto'
 import UnauthorizedDto from '@/dto/unauthorized.dto'
 import { JwtAuthGuard } from 'src/auth/auth.guard'
+import UpdateUserDto from './dto/updateUser.dto'
+import BadRequestDto from '@/dto/badRequest.dto'
 
 @Controller('users')
 export default class UserController {
@@ -42,5 +44,16 @@ export default class UserController {
   @Get()
   async getAll(): Promise<User[]> {
     return await this.userService.getAll()
+  }
+
+  @ApiTags('User')
+  @ApiResponse({ status: 201, type: [ReturnUserDto] })
+  @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
+  @ApiBadRequestResponse({ status: 400, type: BadRequestDto })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Patch()
+  async update(@Body() data: UpdateUserDto): Promise<ReturnUserDto> {
+    return await this.userService.update(data)
   }
 }

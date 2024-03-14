@@ -28,23 +28,43 @@ export default class AuthService {
 
       const { email, password } = data
   
-      const user = await this.userService.getOneByEmail(email)
+      const { user, password: userPass } = await this.userService.getOneByEmail(email)
   
-      if (user && user.password) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password: userPass, ...restUser } = user
-        const isValidPass = await bcrypt.compare(password, user.password)
+      if (user && userPass) {
+        const isValidPass = await bcrypt.compare(password, userPass)
   
         if (isValidPass) {
-          const tokens = await this.sessionService.generateTokens({ _id: user._id, email: user.email })
+          const tokens = await this.sessionService.generateTokens({ user: { _id: user._id, email: user.email } })
 
-          return { ...restUser, ...tokens }
+          return { ...user, ...tokens }
         }
       }
       
       throw new BadRequestException('Invalid credentials...')
     } catch (error) {
       throw new BadRequestException(error.message)
+    }
+  }
+
+  async loginByProvider({ email, name }: { email: string, name: string }): Promise<ReturnUserDto & ReturnTokenDto> {
+    try {
+      await this.removeExpiredSessions()
+
+      let result: ReturnUserDto
+
+      const { user, password } = await this.userService.getOneByEmail(email)
+
+      if (user) {
+        if (!user.isAuthProvider && password) result = await this.userService.update({ _id: user._id, isAuthProvider: true })
+
+        result = user
+      } else result = await this.userService.createByProvider({ email, name })
+
+      const tokens = await this.sessionService.generateTokens({ user: { _id: result._id, email: result.email } })
+
+      return { ...result, ...tokens }
+    } catch (error) {
+      throw error
     }
   }
 }
