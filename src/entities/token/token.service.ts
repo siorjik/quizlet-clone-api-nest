@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import { Model, Schema } from 'mongoose'
 import { config } from 'dotenv'
 
 import Token from './schemas/token.schema'
@@ -12,8 +12,8 @@ config({ path: `.env.${process.env.NODE_ENV}` })
 
 @Injectable()
 export default class TokenService {
-  private readonly accessExpire: number = 3
-  private readonly refreshExpire: number = 5
+  private readonly accessExpire: number = 5
+  private readonly refreshExpire: number = 10
 
   constructor(private readonly jwtService: JwtService, @InjectModel(Token.name) private tokenModel: Model<Token>) { }
 
@@ -21,9 +21,12 @@ export default class TokenService {
     return +new Date() + (value * 60000)
   }
 
-  async generateTokens(user: { [k: string]: string | Types.ObjectId }, isRefresh = false): Promise<ReturnTokenDto> {
+  async generateTokens(
+    { user, isRefresh, accessTime }:
+    { user: { [k: string]: string | Schema.Types.ObjectId }, isRefresh?: boolean, accessTime?: number }
+  ): Promise<ReturnTokenDto> {
     const accessToken =
-      this.jwtService.sign({ user }, { secret: process.env.ACCESS_SECRET, expiresIn: this.accessExpire + 'm' })
+      this.jwtService.sign({ user }, { secret: process.env.ACCESS_SECRET, expiresIn: (accessTime ?? this.accessExpire) + 'm' })
     const refreshToken =
       this.jwtService.sign({ user }, { secret: process.env.REFRESH_SECRET, expiresIn: this.refreshExpire + 'm' })
 
@@ -51,7 +54,7 @@ export default class TokenService {
       if(result) {
         const { user } = this.verifyToken(refreshToken)
 
-        const tokens = await this.generateTokens(user, true)
+        const tokens = await this.generateTokens({ user, isRefresh: true })
 
         await this.tokenModel.findByIdAndUpdate(result._id, {
           token: tokens.refreshToken, expireAt: new Date(this.getExpirationDate(this.refreshExpire))

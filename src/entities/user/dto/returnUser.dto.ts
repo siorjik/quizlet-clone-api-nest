@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString, IsEmail, MinLength } from 'class-validator'
+import { IsString, IsEmail, MinLength, IsBoolean } from 'class-validator'
 import { ObjectId } from 'mongoose'
 
 export default class ReturnUserDto {
@@ -18,9 +18,17 @@ export default class ReturnUserDto {
 
   @ApiProperty()
   @IsString()
-  createdAt: string
+  createdAt: Date
 
   @ApiProperty()
   @IsString()
-  updatedAt: string
+  updatedAt: Date
+
+  @ApiProperty()
+  @IsBoolean()
+  isActive: boolean
+
+  @ApiProperty()
+  @IsBoolean()
+  isAuthProvider: boolean
 }
