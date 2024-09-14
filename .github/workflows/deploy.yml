@@ -18,7 +18,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to GitHub Container Registry
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_LOGIN }}
@@ -38,14 +38,20 @@ jobs:
     steps:
       - name: Deploy to hosting via SSH
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          CHECK: 'checking variable'
         with:
           host: ${{ secrets.HOSTING }}
           username: ${{ secrets.HOSTING_USER }}
           password: ${{ secrets.HOSTING_PASS }}
+          envs: CHECK
           script: |
             cd ~/projects/quizlet-clone-api-nest
             sudo docker-compose stop
             sudo docker-compose pull
-            sudo docker-compose --env-file .env.production up -d
+            sudo env ACCESS_SECRET=${{ secrets.ACCESS_SECRET }} NODE_ENV=${{ vars.NODE_ENV }} DB_URL=${{ secrets.DB_URL }} CLIENT_HOST=${{ vars.CLIENT_HOST }} REFRESH_SECRET=${{ secrets.REFRESH_SECRET }} \
+              MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} MONGO_INITDB_DATABASE=${{ secrets.MONGO_INITDB_DATABASE }} \
+              MAILER_USER=${{ vars.MAILER_USER }} MAILER_PORT=${{ vars.MAILER_PORT }} MAILER_HOST=${{ vars.MAILER_HOST }} MAILER_PASS=${{ secrets.MAILER_PASS }} \
+              docker-compose up -d
             sudo docker image prune -f
           
