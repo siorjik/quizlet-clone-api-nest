@@ -42,4 +42,9 @@ export default class UpdateUserDto {
   @IsBoolean()
   @IsOptional()
   isAuthProvider?: boolean
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  image?: string
 }
