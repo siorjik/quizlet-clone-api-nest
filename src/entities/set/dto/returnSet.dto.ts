@@ -27,4 +27,12 @@ export default class ReturnSetDto {
   @ApiProperty()
   @IsString()
   updatedAt: string
+
+  @ApiProperty()
+  @IsString()
+  source: string
+
+  @ApiProperty()
+  @IsString()
+  target: string
 }
