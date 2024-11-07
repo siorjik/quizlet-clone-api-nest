@@ -25,4 +25,14 @@ export default class CreateSetDto {
   @ApiProperty()
   @IsMongoId()
   userId: string
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  source: string
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  target: string
 }

@@ -17,6 +17,9 @@ export default class User {
   @Prop({ required: true })
   email: string
 
+  @Prop({ default: null })
+  image: string
+
   @Prop({ default: false })
   isActive: boolean
 

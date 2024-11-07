@@ -9,6 +9,8 @@ import MailerService from '@/mailer/mailer.service'
 import TokenService from '../token/token.service'
 import ReturnUserDto from './dto/returnUser.dto'
 import updateUserDto from './dto/updateUser.dto'
+import UpdatePassDto from './dto/updatePass.dto'
+import SuccessResultDto from '@/dto/successResult.dto'
 
 @Injectable()
 export default class UserService {
@@ -85,7 +87,7 @@ export default class UserService {
     }
   }
 
-  async recoverPassword(email: string): Promise<string> {
+  async recoverPassword(email: string): Promise<SuccessResultDto> {
     try {
       const { user } = await this.getOneByEmail(email)
 
@@ -106,11 +108,34 @@ export default class UserService {
         `
         })
 
-        return 'success'
+        return { success: true }
       }
     } catch (error) {
       throw error
     }
+  }
+
+  async updatePassword(data: UpdatePassDto): Promise<SuccessResultDto> {
+    const { _id, currentPass, newPass } = data
+
+    try {
+      const user = await this.userModel.findOne({ _id })
+  
+      if (!user) throw new BadRequestException('Sorry, account with this email does not exist...')
+      
+      const isValidPass = await bcrypt.compare(currentPass, user.password)
+  
+      if (!isValidPass) throw new BadRequestException('Invalid password...')
+  
+      const hash = await bcrypt.hash(newPass, 10)
+  
+      await this.userModel.findOneAndUpdate({ _id }, { password: hash })
+  
+      return { success: true }
+    } catch (error) {
+      throw error
+    }
+
   }
 
   async update(data: updateUserDto): Promise<ReturnUserDto> {

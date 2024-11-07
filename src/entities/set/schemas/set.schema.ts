@@ -18,6 +18,12 @@ export default class Set {
 
   @Prop({ type: schema.Types.ObjectId, ref: User.name })
   userId: User
+
+  @Prop()
+  source: string
+
+  @Prop()
+  target: string
 }
 
 export const SetSchema = SchemaFactory.createForClass(Set)

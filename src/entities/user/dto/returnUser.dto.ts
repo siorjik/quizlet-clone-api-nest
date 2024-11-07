@@ -31,4 +31,8 @@ export default class ReturnUserDto {
   @ApiProperty()
   @IsBoolean()
   isAuthProvider: boolean
+
+  @ApiProperty()
+  @IsString()
+  image: string
 }

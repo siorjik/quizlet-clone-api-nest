@@ -10,6 +10,8 @@ import UnauthorizedDto from '@/dto/unauthorized.dto'
 import { JwtAuthGuard } from 'src/auth/auth.guard'
 import UpdateUserDto from './dto/updateUser.dto'
 import BadRequestDto from '@/dto/badRequest.dto'
+import UpdatePassDto from './dto/updatePass.dto'
+import SuccessResultDto from '@/dto/successResult.dto'
 
 @Controller('users')
 export default class UserController {
@@ -23,7 +25,7 @@ export default class UserController {
   }
 
   @ApiTags('User')
-  @ApiResponse({ status: 201, type: 'success' })
+  @ApiResponse({ status: 201, type: SuccessResultDto })
   @Post('create-password')
   async createPassword(@Body() data: { password: string, token: string }): Promise<ReturnUserDto> {
     return await this.userService.createPassword(data.password, data.token)
@@ -32,8 +34,18 @@ export default class UserController {
   @ApiTags('User')
   @ApiResponse({ status: 201, type: 'success' })
   @Post('recover-password')
-  async recoveryPassword(@Body() data: { email: string }): Promise<string> {
+  async recoveryPassword(@Body() data: { email: string }): Promise<SuccessResultDto> {
     return await this.userService.recoverPassword(data.email)
+  }
+
+  @ApiTags('User')
+  @ApiResponse({ status: 201, type: SuccessResultDto })
+  @ApiUnauthorizedResponse({ status: 401, type: UnauthorizedDto })
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Patch('update-password')
+  async updatePassword(@Body() data: UpdatePassDto): Promise<SuccessResultDto> {
+    return await this.userService.updatePassword(data)
   }
 
   @ApiTags('User')
